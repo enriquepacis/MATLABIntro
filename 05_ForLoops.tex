@@ -1,0 +1,198 @@
+% !TEX root = MATLAB_Introduction_Blair.tex
+\section{\texttt{for} Loops}
+
+\subsection{Some Useful Non-numerical Functions}
+
+We briefly introduce some MATLAB functions that will help us illustrate a \texttt{for} loop.
+
+\subsubsection{The \texttt{disp()} Function}
+MATLAB comes with some helpful non-numerical functions. For example, the \texttt{disp()} function prints a string to the output. Here are two example uses of the \texttt{disp()} function:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+>> disp('hello world')
+hello world
+>> someStr = 'hello world'; disp(someStr)
+hello world
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+In the first example (line 1), we provide the string \verb!'hello world'! within the input to \texttt{disp()} itself. In the second example (line 3), we first store \verb!'hello world'! in the variable \texttt{someStr}, and then we pass \texttt{someStr} to the \texttt{disp()} function. In both cases, the output is the same.
+
+\subsubsection{The \texttt{num2str()} Function}
+If we wish to print a number, we first convert it to a string using the \texttt{num2str()} function.
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+>> b = num2str('42')
+
+b =
+
+    '42'
+
+>> k = 27; disp(['k = ', num2str(k)])
+k = 27
+>> 
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+In this example, we convert the number 42 to the string \texttt{'42'}, and store it in the variable \texttt{b} (line 1). Then, in line 7, we assign the number 27 to the variable \texttt{k}. We append the string representing the value of \texttt{k} onto the string \verb!'k = '!, and we pass this to \texttt{disp()}, with the result of line 8.
+
+% ==================================================================
+% ==================================================================
+\subsection{\texttt{for} Loops}
+% ==================================================================
+% ==================================================================
+
+A \texttt{for} loop has the following syntax:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+for variable = expr, statement, ..., statement END
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+It begins with the key word \texttt{for} and ends with the key word \texttt{end}. The placeholder \texttt{expr} usually is an expression that defines or references a matrix or an array. The placeholder \texttt{statement, ..., statement} represents the body of the for loop. The body is executed as many times as dictated by the instruction \texttt{for variable = expr}. In each iteration, the variable \texttt{variable} \textemdash known as the \texttt{for}-loop variable \textemdash references some subset of \texttt{expr} and may be manipulated within the body.
+
+A more typical and readable format for a \texttt{for} loop is as follows:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+for variable = expr
+   statement
+   ...
+   statement
+end
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+This produces the same result as the previous listing, but the structure of the loop and the body are (desirably) more clearly visible to a reader.
+
+If \verb!expr! is an array, then the \texttt{for} loop iterates once for each element of \verb!expr!. In the $k$-th iteration of the the loop, \verb!variable! is accessible and takes the value of the $k$-th element of \verb!expr!.
+
+Consider the following listing, in which we define \verb!v! as a $1\times 5$ array of type \texttt{double} (\verb!v = [1 2 3 4 5]!), and we make MATLAB display each element, one at a time:
+% vvv------------------------------------------------------------vvv
+% basicForLoop.m
+\begin{lstlisting}[style=Matlab-editor, label={basicForLoop_listing}]
+% basicForLoop.m
+% Demonstrates a basic for loop
+
+v = 1:5;
+for k = v
+   disp(['The value of k is ', num2str(k)]);
+end
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+For each loop iteration, the value of \verb!k! is displayed, and \verb!k! takes the value of a different element of \verb!v! in each iteration. 
+% vvv------------------------------------------------------------vvv
+% basicForLoop.m
+\begin{lstlisting}[style=Matlab-editor, label={basicForLoop_listing}]
+>> basicForLoop
+The value of k is 1
+The value of k is 2
+The value of k is 3
+The value of k is 4
+The value of k is 5
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+In the following listing, \verb!basicForLoop_v01.m! a modified loop vector \texttt{v} starts with \verb!v_idx = v(1)! (starting at five), and each successive \texttt{v(k)} is two less than the previous value. This continues as long as  \verb!v_idx! is greater than equal to the far end of \texttt{v}.
+The code of \verb!basicForLoop_v01.m! is as follows:
+% vvv------------------------------------------------------------vvv
+% basicForLoop.m
+\begin{lstlisting}[style=Matlab-editor, label={basicForLoop_v01_listing}]
+% basicForLoop_v01.m
+% Demonstrates a basic for loop
+
+v = 5:-2:-12;
+for k = v
+   disp(['The value of k is ', num2str(k)]);
+end
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+This yields the result
+% vvv------------------------------------------------------------vvv
+% basicForLoop.m
+\begin{lstlisting}[style=Matlab-editor, label={basicForLoop_v01_listing}]
+>> basicForLoop_v01
+The value of k is 5
+The value of k is 3
+The value of k is 1
+The value of k is -1
+The value of k is -3
+The value of k is -5
+The value of k is -7
+The value of k is -9
+The value of k is -11
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+\subsubsection{\texttt{for}-loop Automation}
+The listing \verb!Sinusoids_v02.m! (Listing \ref{lstSinusoids_v02}) may be written elegantly using a \texttt{for} loop. This is accomplished in \verb!Sinusoids_v03.m!:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={Sinusoids_v03_listing}, caption={The functionality of \texttt{Sinusoids\_v02.m} is duplicated here, this time using a \texttt{for} loop.}]
+% Sinusoids_v03.m
+% 
+% This is the same as Sinusoids_v02.m, but uses a for loop.
+%
+% By E.P. Blair
+% Baylor University
+%
+
+N = 4; % number of sinusoids (maximum value of N)
+nt = 150; % number of time points
+t = linspace(0, 1, nt); % [s] define a time vector
+
+fn = zeros(4, nt); % Define a storage array to hold fn calculations
+                   % The n^th row of fn stores fn = cos(2*pi*n*t)
+      
+% calculate fn and store fn for each value of n in the n^th row
+for n_idx = 1:N
+    fn(n_idx,:) = cos(2*pi*n_idx*t);
+end
+
+plot(t, fn, 'LineWidth', 2); % thickens the data lines
+grid on; % makes the grid visible
+set(gca, 'FontSize', 18, 'FontName', 'Times');
+xlabel('$t$ (s)', 'Interpreter', 'latex')
+ylabel('$f_n(t)$', 'Interpreter', 'latex')
+sine_lgnd = legend('$f_1$', '$f_2$', '$f_3$', '$f_4$')
+sine_lgnd.Interpreter = 'latex';
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+Lines 15-19 of Listing \ref{lstSinusoids_v02} map to Lines  17-19 here. While the gain is not impressive, it can be helpful, especially if we must repeat a task tens, hundreds, or thousands of times. It makes code much easier to read when \texttt{for} loops are used.
+
+Some best practices when using \texttt{for} loops include the use of a meaningful \texttt{for}-loop variable, and using indentation within the loop to distinguish the body from the beginning and end, as well as from code outside of the loop. Finally, if we do not necessarily know how long a vector is, and we wish to operate on each element, we can use the \texttt(length()) function:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={Sinusoids_v03_listing}, caption={The \texttt{length()} function can be used to determine the number of times a \texttt{for} loop should iterate to operate on each value of the vector \texttt{x}.}]
+...
+for x_idx = 1:length(x)
+   statements
+end
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+
+\subsubsection{\texttt{for} Loops Aren't Always the Best Tool}
+\texttt{for} loops have their place, but they are not necessarily the best tool for certain tasks. For example, if we define \texttt{x} using \verb!x = 1:7!, we could use a \texttt{for} loop to calculate the elements of \texttt{y}, for which \verb!y(k) = x(k)^2!, but it will be faster and more elegant if we use the \verb!.^! (element-wise exponentiation) operator. This is illustrated in Listing \ref{bad_for_usage}, below.
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={bad_for_usage}, caption={Element-wise operations may be faster and more elegant than using a \texttt{for} loop. Here, we use a \texttt{for} loop to square every element of \texttt{x} and store the result in \texttt{y} (lines 5-7). Alternately, we use an element-wise exponentiation to square each element of \texttt{x} and save the results in \texttt{y2}. The element-wise exponentiation is faster, more efficient, clearer, and more concise than the \texttt{for}-loop approach.}]
+% poor_for_usage.m
+
+x = 1:7;
+y = zeros(1, length(x)); % pre-define a storage vector for the result
+for x_idx = 1:length(x)
+    y(x_idx) = x(x_idx)^2;
+end
+y
+
+y2 = x.^2
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+This produces the following output
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={bad_for_usage_output}, caption={The output of Listing \ref{bad_for_usage} shows a case where an element-wise operation yields the same result as a \texttt{for}-loop execution.}]
+>> poor_for_usage
+
+y =
+
+     1     4     9    16    25    36    49
+
+
+y2 =
+
+     1     4     9    16    25    36    49
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^

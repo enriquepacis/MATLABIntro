@@ -1,0 +1,33 @@
+% !TEX root = MATLAB_Introduction_Blair.tex
+
+\section{Extending MATLAB: Writing User-defined Functions}
+
+A powerful way to extend a programming language is to write functions. A well-written function serves as a robust piece of code that can be seamlessly and simply used repeatedly and in different contexts with an invocation to the function. A simple function invocation can belie very complex inner workings, which a user need not reprogram or copy and paste. Complex software can be built in a clear and concise way from robust, rigorously-tested functions.
+
+A function performs a specific task. It may receive input parameters or \textit{input arguments} that determine the results of the function. Some output values\textemdash called \textit{output arguments} \textemdash may be returned by the function.
+
+% ============================================================
+\subsection{Writing Functions}
+% ============================================================
+A MATLAB function is typically defined in a text file with the extension \texttt{*.m}. Functions also may be defined within a script, but in this case, they are only accessible within that script and must appear at the bottom of the script. The former method provides more flexibility and power than the latter, so we prefer to give each function its own appropriately-named \texttt{*.m} file. Here are some salient features of such a function definition file.
+
+\begin{enumerate}
+\item The name of the \texttt{*.m} file must match the function name exactly (MATLAB is case-sensitive).
+\item The file begins with the keyword \texttt{function}, followed by the name of the function. This first line of the function is called the \textit{header}, and it specifies how the user interacts with the function. The syntax of the function header (with end) is given below:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+function [out1, out2] = functionName( in1, in2, in3 )
+	statements
+end
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+Here, the function \texttt{functionName} is a three-input, two-output function.
+\item The file ends with the keyword \texttt{end}.
+\item The \textit{body} consists of the statements that specify the function implementation. The body is written between the header and the closing \texttt{end} statement. There may be only very few statements in the body, or several hundreds or even thousands of lines of code in a function body.
+\item The function header defines the inputs required by the function, as well as the outputs provided by the function.
+\begin{enumerate}
+\item Functions may be designed with no input or output, or few inputs and outputs, or even variable inputs and outputs.
+\item Functional inputs and outputs are called \textbf{arguments} or \textbf{parameters}. The parameters defined in the header are to be used within the function body.
+\end{enumerate}
+\item Commented lines of code immediately following the header provide function help documentation. When you type \texttt{help functionName} in the command line, the function help you defined appears in the command line.
+\end{enumerate}

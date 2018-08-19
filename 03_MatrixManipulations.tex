@@ -1,0 +1,356 @@
+% ============================================
+% ============================================
+% ============================================
+\section{Matrix Manipulations}
+
+In MATLAB, all numbers are treated as matrices. The simplest matrix \texttt{A} is an $m \times n$ array of numbers, where $m$ refers to the number of (horizontal) rows and $n$ refers to the number of (vertical) columns in \texttt{A}. Even when we manipulate a single number, MATLAB treats this single number as a $1\times1$ matrix.
+
+Matrices are important in solving systems of equations. They also are useful in MATLAB for storing arrays of numerical data. In this context, matrices may also be called ``storage arrays.''
+
+% ============================================
+% ============================================
+\subsection{Defining Matrices and Vectors}
+A matrix \texttt{A} can be formed by listing each element row by row within a single set of brackets (``\texttt{[}'' and ``\texttt{]}''). Within a row, elements may be separated by white space or by a column, and rows are delimited using semicolons. An example of this is given in the following command and output:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={MatrixDef01}, caption={A matrix is defined by enumerating its elements and delineating the matrix with brackets (\texttt{`[`} and \texttt{`]`}). Individual elements within a row are separated by a white space, or optionally a comma (\texttt{,}). Rows are separated using a semicolon (\texttt{;}).}]
+>> A = [1 2 3 4; 5 6 7 8; 9 10 11 12] % this defines a 3x4 matrix A
+
+A =
+
+     1     2     3     4
+     5     6     7     8
+     9    10    11    12
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+Alternately, functions such as \texttt{rand()}, \texttt{eye()}, \texttt{zeros()}, \texttt{ones()}, and \texttt{diag()} may be used to create matrices. Consider the following MATLAB script, entitled ``\texttt{MatrixCreation.m}'':
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={MatrixDef02}, caption={Built-in MATLAB functions may be used to create/define matrices.}]
+% MatrixCreation.m
+
+m = 3; n = 2; B = rand(m) % defines a pseudorandom m-by-m matrix
+
+C = rand([m,n]) % defines a pseudorandom m-by-n matrix
+
+In = eye(n) % defines an n-by-n identity matrix
+
+Znm = zeros(n, m) % defines an n-by-m matrix of zeros
+
+Omn = ones(m, n) % defines a m-by-n matrix of ones
+
+D = diag([1 2 3 4 5]) % defines a diagonal matrix with the input vector
+                      %  on the diagonal
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+Line 3 of \texttt{MatrixCreation.m} defines a $m\times m$ matrix of pseudorandom numbers using the \texttt{rand()} function and stores them in the variable \texttt{B}. Another way to use \texttt{rand()} is to specify a matrix input, where each element of the input matrix specifies a dimension size (the row specification is first, and the column specification comes second). This is done in line 5. In line 7, we use \texttt{eye(n)} to construct a $n\times n$ identity matrix. Line 9 creates a matrix of zeros, and line 11 creates a matrix of ones. Line 13 creates a diagonal matrix. Running \texttt{MatrixCreation.m} results in the following output:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={MatrixDef02out}, caption={The Command Window output for an invocation of Listing \ref{MatrixDef02}.}]
+>> MatrixCreation
+
+B =
+
+    0.4898    0.7094    0.6797
+    0.4456    0.7547    0.6551
+    0.6463    0.2760    0.1626
+
+
+C =
+
+    0.1190    0.3404
+    0.4984    0.5853
+    0.9597    0.2238
+
+
+In =
+
+     1     0
+     0     1
+
+
+Znm =
+
+     0     0     0
+     0     0     0
+
+
+Omn =
+
+     1     1
+     1     1
+     1     1
+
+
+D =
+
+     1     0     0     0     0
+     0     2     0     0     0
+     0     0     3     0     0
+     0     0     0     4     0
+     0     0     0     0     5
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+Row vectors are simply $m \times n$ matrices with $m=1$, and column vectors are $m\times n$ matrices with $n=1$. Here are some ways to construct numerical row vectors:
+\begin{enumerate}
+\item A simple row vector of $n$ integers may be formed by using the syntax ``\verb!k:k+n-1!''. For example, the input \verb!2:5! defines a vector \verb![2 3 4 5]!. This is referred to as a \textit{range} of integers, with unity increment between successive elements. A increment may be specified using ``\verb!min:inc:max!''. For example, the input ``\verb!2:2:10!'' specifies the row vector \verb![2 4 6 8 10]!
+\item  A row  vector of floating-point double values may be formed using the syntax ``\verb!min:inc:max!'', where \texttt{min} is the low value, \texttt{max} is the lowest value and the first element in the vector, and each successive element larger than the previous value by \texttt{inc}. No values larger than \texttt{max} are included in the vector.
+\item The \texttt{linspace()} command can be used to create row vector of $n$ evenly-spaced points that includes the minimum and maximum values \texttt{min} and \texttt{max} using the syntax ``\verb!linspace(min, max, n)!''
+\end{enumerate}
+
+
+% ============================================
+% ============================================
+\subsection{Subscripting Matrices}
+
+MATLAB allows us to refer to individual elements of a matrix by using parentheses. If \texttt{A} is a matrix, then \verb!A(row_spec, col_spec)! provides a syntax for subscripting a subset of matrix elements. Here, \verb!row_spec! and \verb!col_spec! are row specifier and column specifier expressions, respectively. The \verb!row_spec! and \verb!col_spec! are also called \textit{indices} (plural of the word, ``index''), and subscripting is also called ``indexing.''
+
+While \verb!row_spec! and \verb!col_spec! must be integers or logical values, there are many ways to specify rows and columns.
+\begin{itemize}
+\item If \verb!row_spec! and \verb!col_spec! both are single integers, \verb!A(row_spec, col_spec)! specifies a single element of \texttt{A}.
+\item A subset of rows or columns may be specified using vectors or ranges. A full row-span or column-span may be achieved by using ``\texttt{:}'' as either the  \verb!row_spec! or \verb!col_spec! expression.
+\item When using a vector as a \verb!row_spec! or \verb!col_spec! expression, the \texttt{end} keyword identifies the last valid index for the row or column.
+\end{itemize}
+Examples of matrix subscripting are given in the code listing of ``\texttt{MatrixSubscripting.m}'':
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={MatrixSubscripting}, caption={Some examples of matrix subscripting, the referencing of a subset of matrix elements.}]
+A = [1 2 3 4; 5 6 7 8; 9 10 11 12] % this defines a 3x4 matrix A
+
+A34 = A(3,4) % extract the (3,4) element of A
+
+B = A(2:3,1:3) % extract elements in rows 2-3 and columns 1-3 of A
+
+v = A(:, 2) % extract elements in all rows and colum 2 of A [col. vector]
+
+w = A(3, :) % extract elements row 3 and all columns of A [row vector]
+
+A2end = A(2,end) % extract the last element of row 2
+
+A2endm2_end = A(2, end-2:end) % extract the last three elements of row 2\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+When this script is run, the following output results:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={MatrixSubscriptingOut}, caption={Command Window output for Listing \ref{MatrixSubscripting}.}]
+>> MatrixSubscripting
+
+A =
+
+     1     2     3     4
+     5     6     7     8
+     9    10    11    12
+
+
+A34 =
+
+    12
+
+
+B =
+
+     5     6     7
+     9    10    11
+
+
+v =
+
+     2
+     6
+    10
+
+
+w =
+
+     9    10    11    12
+
+
+A2end =
+
+     8
+
+
+A2endm2_end =
+
+     6     7     8
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+% ============================================
+% ============================================
+\subsection{Subscripting Matrices and Assignment Statements}
+
+We can assign individual elements or subsets of elements of a matrix by using a subscripted matrix on the left-hand side (LHS) of an assignment statement. Consider the code listing of \texttt{SubscriptedAssignments.m}:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={MatrixSubscriptingAssign}, caption={Matrix subscripting may be used to assign values to a subset of matrix elements.}]
+% SubscriptedAssignments.m
+
+M = zeros(4, 5)
+
+M(2, 5) = 1
+
+M(1:2, 2:3) = 1
+
+M(3:4, 2:4) = rand(2,2)
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+Line 3 defines \texttt{M} as a $4\times 5$ matrix of zeros, with the following result:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+M =
+
+     0     0     0     0     0
+     0     0     0     0     0
+     0     0     0     0     0
+     0     0     0     0     0
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+ Line 5 of \texttt{SubscriptedAssignments.m} stores the value 1 in the $M_{2,5}$, the (2,5) element of \texttt{M}, with this output:
+ % vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+M =
+
+     0     0     0     0     0
+     0     0     0     0     1
+     0     0     0     0     0
+     0     0     0     0     0
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+A single scalar value can be assigned to multiple elements of a matrix \texttt{M} simultaneously. As an example of this, line 7 of \texttt{SubscriptedAssignments.m} assigns the single scalar value 1 to a $2\times2$ block of elements in \texttt{M}:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+M =
+
+     0     1     1     0     0
+     0     1     1     0     1
+     0     0     0     0     0
+     0     0     0     0     0
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+In general, however, the LHS and right-hand-side (RHS) of an assignment statement must match in size. Line 9 of \texttt{SubscriptedAssignments.m} demonstrates this: MATLAB throws an error because the target of the assignment on the LHS of line 9 is a $2\times3$ block of elements, but the value on the RHS of line 9 is a $2\times2$ block.
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+Subscripted assignment dimension mismatch.
+
+Error in SubscriptedAssignments (line 9)
+M(3:4, 2:4) = rand(2,2)
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+% ============================================
+% ============================================
+\subsection{Concatenation}
+Matrices can be combined via concatenation. Horizontal concatenation is the act of creating a larger matrix \texttt{C} from two smaller matrices \texttt{A} and \texttt{B} by setting \texttt{A} and \texttt{B} side-by-side. The syntax for horizontal concatenation is \verb!{C = [A B]!, or equivalently, \verb!{C = [A, B]!. This involves listing the constituent matrices within brackets (\texttt{[} and \texttt{]}) and separating them with either a comma (\texttt{,}) or a white space. An example of this is:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={MatrixHorizCat}, caption={Matrices may be concatenated horizontally by using brackets and either a comma or a white space to delimit individual elements.}]
+>> A = [1 2 3]; B = [4 5 6]; C = [A B]
+
+C =
+
+     1     2     3     4     5     6
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+In the input command line, we define \texttt{A} and \texttt{B} as row vectors, which themselves are horizontal concatenations of three numbers, each. Then, we form \texttt{C} by horizontally concatenating \texttt{A} and \texttt{B}. Horizontal concatenation requires that constituents have the same number of rows. Concatenation can be thought of as making a matrix of matrices.
+
+Vertical concatenation is accomplished in the same was as horizontal concatenation, except that constituent matrices must have the same number of columns, and constituent matrices must be separated by a semicolon ('\texttt{;}'). The following listing forms the matrix \texttt{D} by vertically concatenates \texttt{A} and \texttt{B}:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, label={MatrixVertCat}, caption={Matrices may be concatenated vertically by using brackets and either a semicolon to delimit individual elements.}]
+>> D = [A; B]
+
+D =
+
+     1     2     3
+     4     5     6
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+ 
+% ============================================
+% ============================================
+\subsection{Single-subscripting}
+Matrices also may be subscripted with a single index, instead of using both \texttt{row\_spec} and \texttt{col\_spec} specifiers. For an $m\times n$ matrix \texttt{A}, the element \texttt{A(1)} is the $A_{1,1}$ element in the upper left. MATLAB is known as a \textit{column-major} language, in which elements are counted down the columns. Thus, \texttt{A(2)} refers to $A_{2,1}$, which is the element immediately below $A_{1,1}$ in column 1; and \texttt{A(3)} refers to $A_{2,1}$. When the end of the column is reached, the counting continues at the top of the next column.
+
+A simple application of this is the subscripting of a vector \texttt{A}. The expression \texttt{A(k)} refers to the $k$-th element of \texttt{A}, regardless of whether \texttt{A} is a row vector or a column vector. 
+ % ============================================
+% ============================================
+\exmp{Example} \label{Exmp:Cosines}
+Define a row vector \texttt{t} that includes $n_t = 75$ time points from $t=0$ to $t=1$ (inclusive). Then, define a matrix \texttt{fn} to represent $f_n (t) = \cos (2\pi n t)$ over the interval $t\in [0, 1]$ for $n \in \{1, 2, 3, 4\}$.
+
+\noindent \underline{Solution}
+The solution is given in the code listing of \texttt{Sinusoids.m}.
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor]
+% Sinusoids.m
+%
+% By E.P. Blair
+% Baylor University
+%
+
+nt = 75; % number of time points
+t = linspace(0, 1, nt); % [s] define a time vector
+
+fn = zeros(4, nt); % Define a storage array to hold fn calculations
+                   % The n^th row of fn stores fn = cos(2*pi*n*t)
+      
+% calculate fn and store fn for each value of n in the n^th row
+fn(1,:) = cos(2*pi*t); % n = 1
+fn(2,:) = cos(2*pi*2*t); % n = 2
+fn(3,:) = cos(2*pi*3*t); % n = 3
+fn(4,:) = cos(2*pi*4*t); % n = 4
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+
+So far, we have discussed MATLAB numerical data. Numbers in MATLAB are double-precision floating-point values, or simply \verb!double!. MATLAB uses 8 bytes of memory to store each one. When storing complex numbers, MATLAB uses two doubles for each individual number: one for the real part, and one for the complex part. 
+
+% ============================================
+% ============================================
+\subsection{The \texttt{char} Data Type and Strings}
+
+Now we consider data of type \verb!char!, which is short for ``character.'' MATLAB \texttt{char}s store individual letters (uppercase [\texttt{A}-\texttt{Z}] or lowercase [\texttt{a}-\texttt{z}]), numerals (\texttt{0}-\texttt{9}), and special characters (\verb!~!, \verb!!!, \verb!@!,  \verb!#!, etc.). Data of type \verb!char! may be stored in a variable using an assignment statement. In MATLAB, we identify a character using a pair of single quotes, as follows in this MATLAB command line input and resulting output:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, caption={Simple definition of \texttt{char} variables in the Command Window.}]
+>> x = '1'
+
+x =
+
+    '1'
+
+>> y = 1
+
+y =
+
+     1
+
+>> 
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+Here, we have stored the \texttt{char} data \texttt{'1'} in the variable \texttt{x} (line 1, with output on line 3). We contrast this with the case where we store numerical (\texttt{double} data (the value 1) in the variable \texttt{y} (line 7, with output on line 9). The \texttt{char} data \verb!'1'! is distinguished from the \texttt{double} data 1 by the single quotes.
+
+
+\subsubsection{Strings}
+A string is simply an array of \texttt{char}s. A string may be defined using the following syntax:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, caption={Simple definition of a \texttt{char} string and its output.}]
+>> x = 'hello world'
+
+x =
+
+    'hello world'
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+It is most typical to work with strings as row vectors, but column vectors and general matrices also may be constructed. Matrix concatenations are available for strings:
+% vvv------------------------------------------------------------vvv
+\begin{lstlisting}[style=Matlab-editor, caption={Horizontal and vertical string concatenations.}]
+>> x = 'cat'; y = 'dog'; z = [x y]
+
+z =
+
+    'catdog'
+>> w = [x; y]
+
+w =
+
+  2×3 char array
+
+    'cat'
+    'dog'
+\end{lstlisting}
+% ^^^------------------------------------------------------------^^^
+

@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage[font={small, it}]{caption}
+\usepackage{matlab-prettifier}
+\usepackage{listings}
+\usepackage{keystroke}
+\usepackage{menukeys}
+\usepackage{amsthm}
+\usepackage{subfigure}
+\lstset{ %
+language=Matlab,                % choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,           % adds a frame around the code
+tabsize=2,          % sets default tabsize to 2 spaces
+captionpos=b,           % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+\usepackage{color}
+\usepackage{hyperref}		% Enables hyperlinks via "\hyperref{}" and "\href{}{}" and "\url{}"
+
+% Define an Example environment
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\newcommand{\myhref}[2]{\textcolor{blue}{\underline{\href{#1}{#2}}}}
+
+% Title information
+\author{Enrique P. Blair, Ph.D.}
+\title{An Introduction to MATLAB}
+
+% ============================================
+% ============================================
+% ============================================
+\begin{document}
+% ============================================
+% ============================================
+% ============================================
+
+\maketitle
+
+\tableofcontents
+
+\clearpage
+
+\section{Overview of MATLAB}
+``MATLAB'' is a contraction of ``\textbf{mat}rix \textbf{lab}oratory,'' and it was designed to allow matrix manipulations. MATLAB is very powerful, allowing users to manipulate, analyze, and visualize data. Users can write functions, classes, and build graphical user interfaces (GUIs).
+
+\subsection{Installing MATLAB - Students, Staff, and Faculty of Baylor University}
+If you are currently enrolled at or affiliated with Baylor University, you can use Baylor's site license and download/install MATLAB on a university-owned laptop \textbf{free of charge}.
+
+To install MATLAB on your own personal laptop:
+\begin{enumerate}
+\item Point a browser to \myhref{https://www.baylor.edu/library/techpoint/}{https://www.baylor.edu/library/techpoint/}
+\item Then choose ``Student \& Software Discounts'' $\rightarrow$ ``Software You Can Install''
+\item Next, follow the link for ÒInstallation and download instructions HEREÓ
+\end{enumerate}
+
+% do so, please follow this link to the \myhref{https://www.baylor.edu/its/index.php?id=63551}{installation resources and instructions.}
+
+\include{02_UsingMATLAB}
+
+\include{03_MatrixManipulations}
+
+\include{04_BasicVisualization}
+
+\include{05_ForLoops}
+
+\include{06_Functions}
+
+
+
+\end{document}
